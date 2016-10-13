@@ -5,7 +5,7 @@ This game provides two kinds of chess with different colors, user should change 
 
 ## Prerequisites
 * [qt]
-(http://pointclouds.org/downloads/)
+(http://doc.qt.io/qt-5/osx.html)
 
 ## Usage
 
