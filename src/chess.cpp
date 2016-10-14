@@ -24,14 +24,23 @@ void ChessBoard::Start()
     }
 }
 
-bool ChessBoard::RecurAgain(Piece::Coordinate current_coordinate, Piece neighbor, std::vector<Piece> pieces, bool last_origin_color, bool current_point_color)
+bool ChessBoard::RecurAgain(Piece::Coordinate current_coordinate, Piece neighbor, std::vector<Piece> pieces, int last_origin_status, int current_point_status)
 {
-  if (!neighbor.get_block() && !neighbor.get_changed()) // not be blocked and not be changed
+  if (neighbor.get_status() != BLOCK && !neighbor.get_changed()) // not be blocked and not be changed
     {
       pieces[current_coordinate.x * width + current_coordinate.y].set_changed(true);
-      pieces[current_coordinate.x * width + current_coordinate.y].set_color(!current_point_color); // inverse the color
-      if (NumOfConnectedDomain(pieces, last_origin_color) == 1) // there's only one connected domain
+      pieces[current_coordinate.x * width + current_coordinate.y].set_status(BLACK + WHITE - current_point_status); // inverse the color, 1->2, 2->1
+      if (NumOfConnectedDomain(pieces, last_origin_status) == 1) // there's only one connected domain
         {
+          // compute the attribute <num_of_around_piece>
+          int num_of_remaining_pieces = set_num_of_around_piece(pieces, last_origin_status);
+          Piece::Coordinate start_coordinate = origin.back();
+
+
+
+
+
+
 
         }
       else // continue to recur
@@ -44,10 +53,9 @@ bool ChessBoard::RecurAgain(Piece::Coordinate current_coordinate, Piece neighbor
 
 bool ChessBoard::SearchWayFool(Piece::Coordinate point, std::vector<Piece> pieces)
 {
-  bool flag = false;; // flag == true, find a way
   Piece current_piece = pieces[point.x * width + point.y];
-  bool last_origin_color = pieces[origin.back().x * width + origin.back().y].get_color();
-  bool current_point_color = current_piece.get_color();
+  int last_origin_status = pieces[origin.back().x * width + origin.back().y].get_status();
+  int current_point_status = current_piece.get_status();
 
   // search for the 4-neighbor of this point
   Piece::Coordinate neighbor_up = {point.x - 1, point.y};
@@ -55,34 +63,35 @@ bool ChessBoard::SearchWayFool(Piece::Coordinate point, std::vector<Piece> piece
   Piece::Coordinate neighbor_down = {point.x + 1, point.y};
   Piece::Coordinate neighbor_right = {point.x, point.y + 1};
 
+  //TODO: maybe can merge the four "if" to one "for"
   if (neighbor_up.x >= 0) // the up neighbor
     {
       Piece neighbor = pieces[neighbor_up.x * width + neighbor_up.y];
-      if (RecurAgain(point, neighbor, pieces, last_origin_color, current_point_color))
+      if (RecurAgain(point, neighbor, pieces, last_origin_status, current_point_status))
         return true;
     }
   if (neighbor_left.y >= 0) // the left neighbor
     {
       Piece neighbor = pieces[neighbor_left.x * width + neighbor_left.y];
-      if (RecurAgain(point, neighbor, pieces, last_origin_color, current_point_color))
+      if (RecurAgain(point, neighbor, pieces, last_origin_status, current_point_status))
         return true;
     }
   if (neighbor_down.x < height) // the down neighbor
     {
       Piece neighbor = pieces[neighbor_down.x * width + neighbor_down.y];
-      if (RecurAgain(point, neighbor, pieces, last_origin_color, current_point_color))
+      if (RecurAgain(point, neighbor, pieces, last_origin_status, current_point_status))
         return true;
     }
   if (neighbor_right.y < width) // the right neighbor
     {
       Piece neighbor = pieces[neighbor_right.x * width + neighbor_right.y];
-      if (RecurAgain(point, neighbor, pieces, last_origin_color, current_point_color))
+      if (RecurAgain(point, neighbor, pieces, last_origin_status, current_point_status))
         return true;
     }
   return false;
 }
 
-int ChessBoard::NumOfConnectedDomain(std::vector<Piece> pieces, bool last_origin_color)
+int ChessBoard::NumOfConnectedDomain(std::vector<Piece> pieces, int last_origin_status)
 {
   int num = 0; // number of connected domain
 
@@ -97,7 +106,32 @@ int ChessBoard::NumOfConnectedDomain(std::vector<Piece> pieces, bool last_origin
   return num;
 }
 
-void ChessBoard::set_num_of_around_piece()
+int ChessBoard::set_num_of_around_piece(std::vector<Piece> pieces, int last_origin_status)
 {
+  int num = 0; // the number of pieces in the connected domain
+  Piece::Coordinate offset[4] = {{-1, 0}, {0, -1}, {1, 0}, {0, 1}};
+  for (int i = 0; i < height; i++)
+    for (int j = 0; j < width; j++)
+      {
+        if (pieces[i * width + j].get_status() == last_origin_status) // because last_origin_status != BLOCK certainly(restraint during user input), this operation also get rid of the situation that piece is blocked.
+          {
+            num++;
+            // traverse four neighbors of this piece
+            for (int k = 0; k < 4; k++)
+              {
+                Piece::Coordinate neighbor = {pieces[i * width + j].get_coordinate().x + offset[k].x, pieces[i * width + j].get_coordinate().y + offset[k].y};
+                if (valid(neighbor) && pieces[neighbor.x * width + neighbor.y].get_status() == last_origin_status) // the coordinate is valid && not blocked && color the same
+                  pieces[i * width + j].set_num_of_around_piece(pieces[i * width + j].get_num_of_around_piece() + 1);
+              }
+          }
+      }
+  return num;
+}
 
+
+bool ChessBoard::valid(Piece::Coordinate piece_coordinate) // whether a coordinate valid or not
+{
+  if (piece_coordinate.x >= 0 && piece_coordinate.x < height && piece_coordinate.y >= 0 && piece_coordinate.y < width)
+    return true;
+  else return false;
 }

@@ -11,25 +11,18 @@ UserInput initial()
   input.set_height(4);
   input.set_width(4);
 
-  // set color
-  std::vector<bool> color;
+  // set status(no block)
+  std::vector<int> status;
   for (int i = 0; i < input.get_height(); i++)
     for (int j = 0; j < input.get_width(); j++)
-      color.push_back(true);
-  color[4] = false;
-  color[5] = false;
-  color[7] = false;
-  color[8] = false;
-  color[10] = false;
-  color[11] = false;
-  input.set_color(color);
-
-  //set block
-  std::vector<bool> block;
-  for (int i = 0; i < input.get_height(); i++)
-    for (int j = 0; j < input.get_width(); j++)
-      block.push_back(false); // no block
-  input.set_block(block);
+      status.push_back(WHITE);
+  status[4] = BLACK;
+  status[5] = BLACK;
+  status[7] = BLACK;
+  status[8] = BLACK;
+  status[10] = BLACK;
+  status[11] = BLACK;
+  input.set_status(status);
 
   //set origin
   std::vector<Piece::Coordinate> origin;
