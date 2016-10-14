@@ -7,7 +7,7 @@ void ChessBoard::Start()
   Piece::Coordinate first_origin = origin.front();
   if (SearchWayFool(first_origin, pieces)) // find one way
     {
-      std::cout << "find one way!!!";
+      std::cout << "find one way!!!1\n";
     }
   else // use another origin
     {
@@ -15,7 +15,7 @@ void ChessBoard::Start()
       //TODO: if we have three origins or more, use a circulate rather than if...else...
       if (SearchWayFool(origin.back(), pieces)) // find one way
         {
-          std::cout << "find one way!!!";
+          std::cout << "find one way!!!2\n";
         }
       else
         {
@@ -50,20 +50,20 @@ bool ChessBoard::SearchWayFoolStep2(int num_of_remaining_pieces, std::vector<Pie
 {
   Piece::Coordinate offset[4] = {{-1, 0}, {0, -1}, {1, 0}, {0, 1}};
   Piece::Coordinate possible_next_piece;
+
   int current_index = Coordinate2Index(current_coordinate);
   int valid_neighbor = 0;
   int attribute_neighbor = 0;// number of neighbor which <num_of_around_piece> is 1
   for(int k = 0; k < 4; k++)
     {
-      Piece::Coordinate neighbor_coordinate = {current_coordinate.x + offset[k].x, current_coordinate.y + offset[k].y};
+      Piece::Coordinate neighbor_coordinate = current_coordinate + offset[k];
       if (valid(neighbor_coordinate) && pieces[Coordinate2Index(neighbor_coordinate)].get_status() == current_status)
         {
           valid_neighbor++;
           if(pieces[Coordinate2Index(neighbor_coordinate)].get_num_of_around_piece() == 1)
             {
               attribute_neighbor++;
-              possible_next_piece.x = current_coordinate.x + offset[k].x;
-              possible_next_piece.y = current_coordinate.y + offset[k].y;
+              possible_next_piece = current_coordinate + offset[k];
             }
         }
     }
@@ -81,7 +81,7 @@ bool ChessBoard::SearchWayFoolStep2(int num_of_remaining_pieces, std::vector<Pie
       // modify the num_of_remaining_pieces of his neighbors
       for(int k = 0; k < 4; k++)
         {
-          Piece::Coordinate neighbor_coordinate = {current_coordinate.x + offset[k].x, current_coordinate.y + offset[k].y};
+          Piece::Coordinate neighbor_coordinate = current_coordinate + offset[k];
           if (valid(neighbor_coordinate) && pieces[Coordinate2Index(neighbor_coordinate)].get_status() == current_status)
             pieces[Coordinate2Index(neighbor_coordinate)].set_num_of_around_piece(pieces[Coordinate2Index(neighbor_coordinate)].get_num_of_around_piece() - 1);
         }
@@ -92,7 +92,7 @@ bool ChessBoard::SearchWayFoolStep2(int num_of_remaining_pieces, std::vector<Pie
           // search all neighbors
           for(int k = 0; k < 4; k++)
             {
-              Piece::Coordinate neighbor_coordinate = {current_coordinate.x + offset[k].x, current_coordinate.y + offset[k].y};
+              Piece::Coordinate neighbor_coordinate = current_coordinate + offset[k];
               if (valid(neighbor_coordinate) && pieces[Coordinate2Index(neighbor_coordinate)].get_status() == current_status) // TODO: this line exists too many times in this function, we must find another way to simplify it
                 {
                   bool flag = SearchWayFoolStep2(num_of_remaining_pieces - 1, pieces, neighbor_coordinate, current_status);
@@ -171,7 +171,7 @@ int ChessBoard::get_num_of_connected_domain(std::vector<Piece> pieces, int last_
                 Piece::Coordinate current_coordinate = current_piece.get_coordinate();
                 for (int k = 0; k < 4; k++)
                   {
-                    Piece::Coordinate neighbor_coordinate = {current_coordinate.x + offset[k].x, current_coordinate.y + offset[k].y};
+                    Piece::Coordinate neighbor_coordinate = current_coordinate + offset[k];
                     if (valid(neighbor_coordinate) && !is_traversed[Coordinate2Index(neighbor_coordinate)] && pieces[Coordinate2Index(neighbor_coordinate)].get_status() == last_origin_status)
                       {
                         piece_queue.push(pieces[Coordinate2Index(neighbor_coordinate)]); // push the first piece in queue
@@ -200,7 +200,7 @@ int ChessBoard::set_num_of_around_piece(std::vector<Piece> pieces, int last_orig
             // traverse four neighbors of this piece
             for (int k = 0; k < 4; k++)
               {
-                Piece::Coordinate neighbor = {pieces[i * width + j].get_coordinate().x + offset[k].x, pieces[i * width + j].get_coordinate().y + offset[k].y};
+                Piece::Coordinate neighbor = pieces[i * width + j].get_coordinate() + offset[k];
                 if (valid(neighbor) && pieces[Coordinate2Index(neighbor)].get_status() == last_origin_status) // the coordinate is valid && not blocked && color the same
                   pieces[i * width + j].set_num_of_around_piece(pieces[i * width + j].get_num_of_around_piece() + 1);
               }

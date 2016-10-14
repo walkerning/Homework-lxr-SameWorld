@@ -12,6 +12,12 @@ class Piece // piece class
   {
     int x;
     int y;
+    Coordinate operator+(Coordinate rhs)
+    {
+      rhs.x += x;
+      rhs.y += y;
+      return rhs;
+    }
   };
  Piece(int status, Coordinate coordinate): status(status), coordinate(coordinate), changed(false), num_of_around_piece(0) {}
 

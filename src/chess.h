@@ -34,7 +34,7 @@ class ChessBoard // chessboard class
 
   int get_num_of_connected_domain(std::vector<Piece> pieces, int last_origin_status); // find connected domain
   int set_num_of_around_piece(std::vector<Piece> pieces, int last_origin_status); // in the 2. step, set the nunmber of around pieces, return number of pieces in this connected domain
-  bool RecurAgain(Piece::Coordinate current_coordinate, Piece neighbor, std::vector<Piece> pieces, int last_origin_status, int current_point_status);
+  bool RecurAgain(Piece::Coordinate current_coordinate, Piece neighbor, std::vector<Piece> pieces, int last_origin_status, int current_point_status); // judge: continue to recur i step 1 or go to step 2
 
  private:
   int height; //height of chessboard
