@@ -28,9 +28,9 @@ class ChessBoard // chessboard class
 
   void Start();
   bool SearchWayFool(Piece::Coordinate point, std::vector<Piece> pieces); // use a foolish method to search for the right way, point is the current piece, pieces is the status of all pieces on the chessboard now
-  bool SearchWayFoolStep2(int num_of_remaining_pieces); // search in the second step
+  bool SearchWayFoolStep2(int num_of_remaining_pieces, std::vector<Piece> pieces, Piece::Coordinate current_coordinate, int current_status); // search in the second step
 
-  int NumOfConnectedDomain(std::vector<Piece> pieces, int last_origin_status); // find connected domain
+  int get_num_of_connected_domain(std::vector<Piece> pieces, int last_origin_status); // find connected domain
   int set_num_of_around_piece(std::vector<Piece> pieces, int last_origin_status); // in the 2. step, set the nunmber of around pieces, return number of pieces in this connected domain
   bool RecurAgain(Piece::Coordinate current_coordinate, Piece neighbor, std::vector<Piece> pieces, int last_origin_status, int current_point_status);
 
