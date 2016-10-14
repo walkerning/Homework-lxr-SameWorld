@@ -3,6 +3,7 @@
 
 #include <iostream>
 #include <vector>
+#include <queue>
 #include <time.h>
 
 #include "piece.h" // include piece class
@@ -27,6 +28,7 @@ class ChessBoard // chessboard class
     }
 
   void Start();
+
   bool SearchWayFool(Piece::Coordinate point, std::vector<Piece> pieces); // use a foolish method to search for the right way, point is the current piece, pieces is the status of all pieces on the chessboard now
   bool SearchWayFoolStep2(int num_of_remaining_pieces, std::vector<Piece> pieces, Piece::Coordinate current_coordinate, int current_status); // search in the second step
 
@@ -40,7 +42,8 @@ class ChessBoard // chessboard class
   std::vector<Piece> pieces; // all pieces on the chessboard
   std::vector<Piece::Coordinate> origin; //several starting points
 
-  bool valid(Piece::Coordinate piece_coordinate);
+  bool valid(Piece::Coordinate piece_coordinate); // verify a coordinate valid or not
+  int Coordinate2Index(Piece::Coordinate coordinate); // convert coordinate to index
 
 };
 
