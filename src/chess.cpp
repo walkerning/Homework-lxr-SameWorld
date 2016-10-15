@@ -111,34 +111,12 @@ bool ChessBoard::SearchWayFool(Piece::Coordinate point, std::vector<Piece> piece
   int current_point_status = current_piece.get_status();
 
   // search for the 4-neighbor of this point
-  Piece::Coordinate neighbor_up = {point.x - 1, point.y};
-  Piece::Coordinate neighbor_left = {point.x, point.y - 1};
-  Piece::Coordinate neighbor_down = {point.x + 1, point.y};
-  Piece::Coordinate neighbor_right = {point.x, point.y + 1};
+  Piece::Coordinate offset[4] = {{-1, 0}, {0, -1}, {1, 0}, {0, 1}};
 
-  //TODO: maybe can merge the four "if" to one "for"
-  if (neighbor_up.x >= 0) // the up neighbor
+  for (int k = 0; k < 4; k++)
     {
-      Piece neighbor = pieces[Coordinate2Index(neighbor_up)];
-      if (RecurAgain(point, neighbor, pieces, last_origin_status, current_point_status))
-        return true;
-    }
-  if (neighbor_left.y >= 0) // the left neighbor
-    {
-      Piece neighbor = pieces[Coordinate2Index(neighbor_left)];
-      if (RecurAgain(point, neighbor, pieces, last_origin_status, current_point_status))
-        return true;
-    }
-  if (neighbor_down.x < height) // the down neighbor
-    {
-      Piece neighbor = pieces[Coordinate2Index(neighbor_down)];
-      if (RecurAgain(point, neighbor, pieces, last_origin_status, current_point_status))
-        return true;
-    }
-  if (neighbor_right.y < width) // the right neighbor
-    {
-      Piece neighbor = pieces[Coordinate2Index(neighbor_right)];
-      if (RecurAgain(point, neighbor, pieces, last_origin_status, current_point_status))
+      Piece neighbor = pieces[Coordinate2Index(current_piece.get_coordinate() + offset[k])];
+      if (valid(neighbor.get_coordinate()) && RecurAgain(point, neighbor, pieces, last_origin_status, current_point_status))
         return true;
     }
   return false;

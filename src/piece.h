@@ -18,7 +18,9 @@ class Piece // piece class
       rhs.y += y;
       return rhs;
     }
+    //TODO: add <<
   };
+
  Piece(int status, Coordinate coordinate): status(status), coordinate(coordinate), changed(false), num_of_around_piece(0) {}
 
   // get

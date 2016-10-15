@@ -4,7 +4,6 @@
 #include <iostream>
 #include <vector>
 #include <time.h>
-#include "chess.h"
 #include "piece.h"
 
 class UserInput

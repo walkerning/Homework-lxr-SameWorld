@@ -30,3 +30,28 @@ GUI步骤：
 5.检验该设置是否有解（进阶版，如果没解可以给出相应提示，比如更改一下origin的位置就有解了，或者改变一个子的颜色就有解了等等）
 6.是否保存此自设关卡？自设关卡将会被单独保留进txt文件，可随时调出查看
 下面即转向常规模式进行解密即可
+
+
+#遇到的有些神奇的bug：
+1.一开始qmake编译完使用make怎么都过不了，后来将qmake自动生成的Makefile中的`LFLAGS        = -headerpad_max_install_names -arch x86_64 -Xarch_x86_64 -mmacosx-version-min=10.5`中的10.5改成10.9就解决了，而且网上貌似也有很多人也是用的这种解决方式。。。着实非常神奇。。。
+一些解释：-mmacosx-version-min=version
+       The earliest version of MacOS X that this executable will run on is
+       version.  Typical values of version include 10.1, 10.2, and 10.3.9.
+
+       This value can also be set with the MACOSX_DEPLOYMENT_TARGET environment
+       variable.  If both the command-line option is specified and the
+       environment variable is set, the command-line option will take precedence.
+       参考`http://stackoverflow.com/questions/25352389/difference-between-macosx-deployment-target-and-mmacosx-version-min-compiler-op`
+
+2.rpath问题
+问题描述：dyld: Library not loaded: @rpath/./libQtGui.4.dylib
+原因：找不到动态链接库（dyld：the dynamic link editor），所以解决这个个问题的方法就是找到这个excutable，也即main所需要的动态链接库。
+首先我们要知道他要哪些动态链接库，使用otool -L main来显示，执行命令后的结果如下：
+@rpath/./libQtGui.4.dylib (compatibility version 4.8.0, current version 4.8.7)
+@rpath/./libQtCore.4.dylib (compatibility version 4.8.0, current version 4.8.7)
+/usr/lib/libc++.1.dylib (compatibility version 1.0.0, current version 120.1.0)
+/usr/lib/libSystem.B.dylib (compatibility version 1.0.0, current version 1225.1.1)
+如上，所以我们需要把libQtGui.4.dylib和libQtCore.4.dylib加到main所在的文件夹中，这两个dylib是在/Users/lu/anaconda/lib下。
+下面要把main所在的文件夹的路径加入rpath，就在main.pro中加入:
+> QMAKE_LFLAGS += '-Wl,-rpath,@executable_path'
+注意：在mac os x下，运行的路径是@executable_path，而在linux下为$ORIGIN
