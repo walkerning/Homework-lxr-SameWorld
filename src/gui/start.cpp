@@ -1,9 +1,8 @@
 #include "start.h"
 
-int StartGui::ReadHistory()
+void StartGui::ReadHistory()
 {
-  int level; // user is now at this level, level 0 means user plays at first time, level 1 means user pass the first level
-  UserInput input; // save user's level infos
+  int user_level; // user is now at this level, level 0 means user plays at first time, level 1 means user pass the first level
 
   //get the level which user stands
   std::ifstream level_file("level.txt");
@@ -12,22 +11,27 @@ int StartGui::ReadHistory()
     {
       while(getline(level_file, level_line))// just one number
         {
-          level = atoi(level_line.c_str());
+          user_level = atoi(level_line.c_str());
         }
       level_file.close();
+      ReadAllLevel(user_level);
     }
   else std::cout << "Unable to open level file!!";
+}
 
+void StartGui::ReadAllLevel(int user_level)
+{
   // read level infos from "data.txt"
   std::ifstream data_file("data.txt"); // get levels data
   std::string line;
   int level_num = 0;
+  UserInput input; // save user's level infos
 
   if (data_file.is_open())
     {
       while(getline(data_file, line))
         {
-          if (level_num + 1 == level)
+          if (level_num + 1 == user_level)
             {
               QString qstr = QString::fromUtf8(line.c_str()); // convert string to QString
               QStringList list = qstr.split(" ", QString::SkipEmptyParts);
@@ -78,12 +82,10 @@ int StartGui::ReadHistory()
       data_file.close();
     }
   else std::cout << "Unable to open data file!!";
-
-  return level;
-  //return input;
+  OpenLevelPage(input);
 }
 
-void StartGui::OpenLevelPage()
+void StartGui::OpenLevelPage(UserInput input) // use input info to open level page
 {
 
 

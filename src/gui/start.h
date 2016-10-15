@@ -27,8 +27,9 @@ class StartGui:public QWidget
 
 
  public slots:
-   int ReadHistory(); // read user's history and return number level
-   void OpenLevelPage(); // open the level form
+   void ReadHistory(); // read user's history and return number level
+   void ReadAllLevel(int user_level); // read level infos
+   void OpenLevelPage(UserInput input); // open the level form
    void CustomizeGame(); // show a widget which lets user to select height and width first, and then another one for pieces' status(black, white or block)
 
   private:
