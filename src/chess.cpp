@@ -24,23 +24,34 @@ void ChessBoard::Start()
     }
 }
 
-bool ChessBoard::RecurAgain(Piece::Coordinate current_coordinate, Piece neighbor, std::vector<Piece> pieces, int last_origin_status, int current_point_status)
+bool ChessBoard::IsStep1Last(Piece::Coordinate current_coordinate, Piece neighbor, std::vector<Piece> pieces, int last_origin_status, int current_point_status)
 {
   if (neighbor.get_status() != BLOCK && !neighbor.get_changed()) // not be blocked and not be changed
     {
       pieces[Coordinate2Index(current_coordinate)].set_changed(true);
       pieces[Coordinate2Index(current_coordinate)].set_status(BLACK + WHITE - current_point_status); // inverse the color, 1->2, 2->1
+      result.push(neighbor);
       if (get_num_of_connected_domain(pieces, last_origin_status) == 1) // there's only one connected domain
         {
           // compute the attribute <num_of_around_piece>
           int num_of_remaining_pieces = set_num_of_around_piece(pieces, last_origin_status);
           Piece::Coordinate start_coordinate = origin.back();
           int status = pieces[Coordinate2Index(start_coordinate)].get_status();
-          return SearchWayFoolStep2(num_of_remaining_pieces, pieces, start_coordinate, status);
+          if (SearchWayFoolStep2(num_of_remaining_pieces, pieces, start_coordinate, status) == false)
+            {
+              result.pop();
+              return false;
+            }
         }
       else // continue to recur
         {
-          return SearchWayFool(neighbor.get_coordinate(), pieces);
+          if (SearchWayFool(neighbor.get_coordinate(), pieces))
+            return true;
+          else
+            {
+              result.pop();
+              return false;
+            }
         }
     }
   return false;
@@ -52,8 +63,10 @@ bool ChessBoard::SearchWayFoolStep2(int num_of_remaining_pieces, std::vector<Pie
   Piece::Coordinate possible_next_piece;
 
   int current_index = Coordinate2Index(current_coordinate);
+  result.push(pieces[current_index]);
   int valid_neighbor = 0;
   int attribute_neighbor = 0;// number of neighbor which <num_of_around_piece> is 1
+  // compute valid neighbor and attribute neighbor
   for(int k = 0; k < 4; k++)
     {
       Piece::Coordinate neighbor_coordinate = current_coordinate + offset[k];
@@ -71,9 +84,17 @@ bool ChessBoard::SearchWayFoolStep2(int num_of_remaining_pieces, std::vector<Pie
     {
       if (num_of_remaining_pieces == 1) // only remain itself
         return true;
-      else return false;
+      else
+        {
+          result.pop();
+          return false;
+        }
     }
-  if (attribute_neighbor >= 2) return false;
+  if (attribute_neighbor >= 2)
+    {
+      result.pop();
+      return false;
+    }
   else
     {
       // change color
@@ -86,7 +107,19 @@ bool ChessBoard::SearchWayFoolStep2(int num_of_remaining_pieces, std::vector<Pie
             pieces[Coordinate2Index(neighbor_coordinate)].set_num_of_around_piece(pieces[Coordinate2Index(neighbor_coordinate)].get_num_of_around_piece() - 1);
         }
 
-      if (attribute_neighbor == 1) return SearchWayFoolStep2(num_of_remaining_pieces - 1, pieces, possible_next_piece, current_status);
+      if (attribute_neighbor == 1)
+        {
+          if (SearchWayFoolStep2(num_of_remaining_pieces - 1, pieces, possible_next_piece, current_status))
+            {
+              return true;
+            }
+          else
+            {
+              result.pop();
+              return false;
+            }
+        }
+
       else // attribute_neighbor == 0
         {
           // search all neighbors
@@ -95,10 +128,13 @@ bool ChessBoard::SearchWayFoolStep2(int num_of_remaining_pieces, std::vector<Pie
               Piece::Coordinate neighbor_coordinate = current_coordinate + offset[k];
               if (valid(neighbor_coordinate) && pieces[Coordinate2Index(neighbor_coordinate)].get_status() == current_status) // TODO: this line exists too many times in this function, we must find another way to simplify it
                 {
+                  result.push(pieces[Coordinate2Index(neighbor_coordinate)]);
                   bool flag = SearchWayFoolStep2(num_of_remaining_pieces - 1, pieces, neighbor_coordinate, current_status);
                   if (flag) return true;
+                  else result.pop();
                 }
             }
+          result.pop();
           return false;
         }
     }
@@ -107,6 +143,8 @@ bool ChessBoard::SearchWayFoolStep2(int num_of_remaining_pieces, std::vector<Pie
 bool ChessBoard::SearchWayFool(Piece::Coordinate point, std::vector<Piece> pieces)
 {
   Piece current_piece = pieces[Coordinate2Index(point)];
+  std::cout << Coordinate2Index(current_piece.get_coordinate()) << "   ";
+  result.push(current_piece);
   int last_origin_status = pieces[Coordinate2Index(origin.back())].get_status();
   int current_point_status = current_piece.get_status();
 
@@ -116,9 +154,10 @@ bool ChessBoard::SearchWayFool(Piece::Coordinate point, std::vector<Piece> piece
   for (int k = 0; k < 4; k++)
     {
       Piece neighbor = pieces[Coordinate2Index(current_piece.get_coordinate() + offset[k])];
-      if (valid(neighbor.get_coordinate()) && RecurAgain(point, neighbor, pieces, last_origin_status, current_point_status))
+      if (valid(neighbor.get_coordinate()) && IsStep1Last(point, neighbor, pieces, last_origin_status, current_point_status))
         return true;
     }
+  result.pop();
   return false;
 }
 
@@ -198,4 +237,15 @@ bool ChessBoard::valid(Piece::Coordinate piece_coordinate) // whether a coordina
 int ChessBoard::Coordinate2Index(Piece::Coordinate coordinate)
 {
   return coordinate.x * width + coordinate.y;
+}
+
+void ChessBoard::PrintResult()
+{
+  std::cout << "begin\n";
+  for (int i = 0; i < result.size(); ++i)
+    {
+      std::cout << result.top().get_coordinate().x << " " << result.top().get_coordinate().y << "     ";
+      result.pop();
+    }
+  std::cout << "size:  " << result.size() << std::endl;
 }

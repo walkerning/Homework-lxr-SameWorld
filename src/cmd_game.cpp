@@ -39,5 +39,6 @@ int main()
   UserInput input = initial();
   ChessBoard chess_board(input); // initial a chess board
   chess_board.Start();
+  chess_board.PrintResult();
   return 0;
 }

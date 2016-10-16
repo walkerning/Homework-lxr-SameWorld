@@ -4,6 +4,7 @@
 #include <iostream>
 #include <vector>
 #include <queue>
+#include <stack>
 #include <time.h>
 
 #include "piece.h" // include piece class
@@ -34,7 +35,8 @@ class ChessBoard // chessboard class
 
   int get_num_of_connected_domain(std::vector<Piece> pieces, int last_origin_status); // find connected domain
   int set_num_of_around_piece(std::vector<Piece> pieces, int last_origin_status); // in the 2. step, set the nunmber of around pieces, return number of pieces in this connected domain
-  bool RecurAgain(Piece::Coordinate current_coordinate, Piece neighbor, std::vector<Piece> pieces, int last_origin_status, int current_point_status); // judge: continue to recur i step 1 or go to step 2
+  bool IsStep1Last(Piece::Coordinate current_coordinate, Piece neighbor, std::vector<Piece> pieces, int last_origin_status, int current_point_status); // judge: this piece is the last piece of first step or not
+  void PrintResult();
 
   // test functions
   void TestConnectedDomain() {std::cout << get_num_of_connected_domain(pieces, BLACK)<< std::endl;}
@@ -48,6 +50,7 @@ class ChessBoard // chessboard class
   bool valid(Piece::Coordinate piece_coordinate); // verify a coordinate valid or not
   int Coordinate2Index(Piece::Coordinate coordinate); // convert coordinate to index
 
+  std::stack<Piece> result; // save the result in order to detect
 };
 
 #endif // CHESSBOARD_H_
