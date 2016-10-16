@@ -87,6 +87,10 @@ void StartGui::ReadAllLevel(int user_level)
 
 void StartGui::OpenLevelPage(UserInput input) // use input info to open level page
 {
+  emit levelSignal(input);
+
+
+
 
 
 
