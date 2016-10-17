@@ -93,7 +93,6 @@ void StartGui::OpenLevelPage(UserInput input) // use input info to open level pa
 
 
 
-
 }
 
 void StartGui::CustomizeGame()

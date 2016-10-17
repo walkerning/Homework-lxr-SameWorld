@@ -1,3 +1,5 @@
+#ifndef _SAME_WORLD_START_H_
+#define _SAME_WORLD_START_H_
 #include <QWidget>
 #include <QString>
 #include "ui_start.h"
@@ -23,6 +25,10 @@ class StartGui:public QWidget
     connect(ui.pushButton_2, SIGNAL(clicked()), this, SLOT(CustomizeGame())); // click "customize new game", allow user to customize a new game
   }
 
+ signals:
+  void levelSignal();
+  void levelLayoutSignal(int level_num, int current_level);
+
  public slots:
    void ReadHistory(); // read user's history and return number level
    void ReadAllLevel(int user_level); // read level infos
@@ -35,3 +41,4 @@ class StartGui:public QWidget
   private:
     Ui::Form ui;
 };
+#endif

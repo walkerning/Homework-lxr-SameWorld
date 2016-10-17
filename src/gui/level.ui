@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>LevelForm</class>
- <widget class="QWidget" name="LevelForm">
+ <class>LevelGui</class>
+ <widget class="QWidget" name="LevelGui">
   <property name="geometry">
    <rect>
     <x>0</x>
@@ -13,6 +13,21 @@
   <property name="windowTitle">
    <string>Form</string>
   </property>
+  <widget class="QWidget" name="verticalLayoutWidget">
+   <property name="geometry">
+    <rect>
+     <x>9</x>
+     <y>9</y>
+     <width>381</width>
+     <height>481</height>
+    </rect>
+   </property>
+   <layout class="QVBoxLayout" name="graphicsViewLayout">
+    <item>
+     <widget class="QGraphicsView" name="graphicsView"/>
+    </item>
+   </layout>
+  </widget>
  </widget>
  <resources/>
  <connections/>
