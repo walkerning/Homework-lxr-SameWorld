@@ -50,6 +50,9 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(kv.first, SIGNAL(entered()), SLOT(closePrevWindow()));
   }
 
+  connect(stateM, SIGNAL(finished()), this, SLOT(close()));
+  connect(stateM, SIGNAL(finished()), qApp, SLOT(quit()));
+
   // connect layout signals
   connect(startGui, SIGNAL(levelSignal()), this, SLOT(layoutLevelGui()));
   connect(levelGui, SIGNAL(gameLayoutSignal(int)), this, SLOT(layoutGameGui(int)));
