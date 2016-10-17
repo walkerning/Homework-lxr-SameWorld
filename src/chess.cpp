@@ -24,12 +24,12 @@ void ChessBoard::Start()
     }
 }
 
-bool ChessBoard::IsStep1Last(Piece::Coordinate current_coordinate, Piece neighbor, std::vector<Piece> pieces, int last_origin_status, int current_point_status)
+bool ChessBoard::IsStep1Last(Piece::Coordinate neighbor_coordinate, Piece neighbor, std::vector<Piece> pieces, int last_origin_status, int current_point_status)
 {
   if (neighbor.get_status() != BLOCK && !neighbor.get_changed()) // not be blocked and not be changed
     {
-      pieces[Coordinate2Index(current_coordinate)].set_changed(true);
-      pieces[Coordinate2Index(current_coordinate)].set_status(BLACK + WHITE - current_point_status); // inverse the color, 1->2, 2->1
+      pieces[Coordinate2Index(neighbor_coordinate)].set_changed(true);
+      pieces[Coordinate2Index(neighbor_coordinate)].set_status(BLACK + WHITE - neighbor.get_status()); // inverse the color, 1->2, 2->1
       result.push(neighbor);
       if (get_num_of_connected_domain(pieces, last_origin_status) == 1) // there's only one connected domain
         {
@@ -45,6 +45,8 @@ bool ChessBoard::IsStep1Last(Piece::Coordinate current_coordinate, Piece neighbo
         }
       else // continue to recur
         {
+          pieces[Coordinate2Index(neighbor_coordinate)].set_changed(false);
+          pieces[Coordinate2Index(neighbor_coordinate)].set_status(BLACK + WHITE - neighbor.get_status()); // inverse the color, 1->2, 2->1
           if (SearchWayFool(neighbor.get_coordinate(), pieces))
             return true;
           else
@@ -148,13 +150,16 @@ bool ChessBoard::SearchWayFool(Piece::Coordinate point, std::vector<Piece> piece
   int last_origin_status = pieces[Coordinate2Index(origin.back())].get_status();
   int current_point_status = current_piece.get_status();
 
+  pieces[Coordinate2Index(point)].set_changed(true);
+  pieces[Coordinate2Index(point)].set_status(BLACK + WHITE - current_point_status); // inverse the color, 1->2, 2->1
+
   // search for the 4-neighbor of this point
   Piece::Coordinate offset[4] = {{-1, 0}, {0, -1}, {1, 0}, {0, 1}};
 
   for (int k = 0; k < 4; k++)
     {
       Piece neighbor = pieces[Coordinate2Index(current_piece.get_coordinate() + offset[k])];
-      if (valid(neighbor.get_coordinate()) && IsStep1Last(point, neighbor, pieces, last_origin_status, current_point_status))
+      if (valid(neighbor.get_coordinate()) && IsStep1Last(neighbor.get_coordinate(), neighbor, pieces, last_origin_status, current_point_status))
         return true;
     }
   result.pop();

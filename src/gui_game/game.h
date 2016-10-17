@@ -20,7 +20,7 @@ class GameGui:public QWidget
 
     connect(ui.renewButton, SIGNAL(clicked()), this, SLOT(Restart())); // click "renew", start this level from beginning
     connect(ui.answerButton, SIGNAL(clicked()), this, SLOT(ShowAnswer())); // click "answer", give user a hint
-    connect(ui.backButton, SIGNAL(clicked()), this, SLOT(cLayout())); // click "answer", give user a hint
+    connect(ui.backButton, SIGNAL(clicked()), this, SLOT(Layout())); // click "answer", give user a hint
 
   }
 

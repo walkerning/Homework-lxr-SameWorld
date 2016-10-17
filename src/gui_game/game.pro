@@ -4,11 +4,14 @@ greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
 TARGET = game
 
-SOURCES += game.cpp  main.cpp my_item.cpp
+SOURCES += game.cpp main.cpp my_item.cpp
 
 HEADERS  += game.h
 
 FORMS    += game.ui
+
+RESOURCES += \
+          game.qrc
 
 #QMAKE_CFLAGS += -stdlib=libc++
 #CONFIG += stl c++11

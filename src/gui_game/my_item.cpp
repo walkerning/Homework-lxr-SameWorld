@@ -2,7 +2,7 @@
 
 QRectF MyItem::boundingRect() const
 {
-  return QRectF(0, 0, 100, 100);
+  return QRectF(x, y, radius * 0.8, radius * 0.8);// radius of circle is 100
 }
 
 void MyItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
@@ -12,13 +12,19 @@ void MyItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QW
     {
       QPen pen(Qt::red, 3);
       painter->setPen(pen);
-      painter->drawEllipse(rect);
+      painter->drawRect(rect);
     }
   else
     {
       QPen pen(Qt::black, 3);
       painter->setPen(pen);
-      painter->drawRect(rect);
+
+      QBrush brush(Qt::Dense1Pattern);
+      QImage image;
+      image.load(":background.png");
+      brush.setTextureImage(image);
+      painter->setBrush(brush);
+      painter->drawEllipse(rect);
     }
 }
 
