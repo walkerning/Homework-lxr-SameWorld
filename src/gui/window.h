@@ -1,4 +1,5 @@
 #include <map>
+#include <vector>
 #include <QGraphicsView>
 #include <QGraphicsScene>
 #include <QGraphicsProxyWidget>
@@ -9,6 +10,7 @@
 #include <QParallelAnimationGroup>
 #include <QFinalState>
 #include <QSignalTransition>
+#include <QDebug>
 
 #include "start.h"
 #include "level.h"
@@ -26,8 +28,12 @@ public:
 public slots:
     void showWindow();
     void closePrevWindow();
+    void layoutGameGui(int);
+    void layoutLevelGui();
 
 private:
+    void ReadAllLevels();
+    void ReadHistory();
   StartGui* startGui;
   LevelGui* levelGui;
   GameGui* gameGui;
@@ -44,4 +50,7 @@ private:
 
   QState* prevState;
   std::map<QState*, QGraphicsProxyWidget*> stateWindowMap;
+
+  std::vector<UserInput> userInputVec;
+  int current_level_;
 };

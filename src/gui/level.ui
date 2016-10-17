@@ -6,27 +6,22 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>400</width>
-    <height>500</height>
+    <width>500</width>
+    <height>580</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>Form</string>
   </property>
-  <widget class="QWidget" name="verticalLayoutWidget">
+  <widget class="QGraphicsView" name="graphicsView">
    <property name="geometry">
     <rect>
-     <x>9</x>
-     <y>9</y>
-     <width>381</width>
-     <height>481</height>
+     <x>-1</x>
+     <y>-1</y>
+     <width>500</width>
+     <height>585</height>
     </rect>
    </property>
-   <layout class="QVBoxLayout" name="graphicsViewLayout">
-    <item>
-     <widget class="QGraphicsView" name="graphicsView"/>
-    </item>
-   </layout>
   </widget>
  </widget>
  <resources/>

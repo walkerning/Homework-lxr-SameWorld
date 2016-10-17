@@ -1,0 +1,9 @@
+<RCC>
+    <qresource prefix="/">
+    <!--        <file>background.png</file> -->
+        <file alias="level.txt">sparesource/level.txt</file>
+        <file alias="data.txt">sparesource/data.txt</file>
+        <file alias="finished_level_item.png">images/finished_level_item.png</file>
+        <file alias="level_item.png">images/level_item.png</file>
+    </qresource>
+</RCC>

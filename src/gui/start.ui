@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>400</width>
-    <height>500</height>
+    <width>500</width>
+    <height>580</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -16,8 +16,8 @@
   <widget class="QLabel" name="label">
    <property name="geometry">
     <rect>
-     <x>110</x>
-     <y>110</y>
+     <x>170</x>
+     <y>120</y>
      <width>221</width>
      <height>81</height>
     </rect>
@@ -34,10 +34,10 @@
     <string>The Same World!</string>
    </property>
   </widget>
-  <widget class="QPushButton" name="pushButton">
+  <widget class="QPushButton" name="startButton">
    <property name="geometry">
     <rect>
-     <x>110</x>
+     <x>170</x>
      <y>280</y>
      <width>161</width>
      <height>61</height>
@@ -53,13 +53,13 @@
     <string notr="true"/>
    </property>
    <property name="text">
-    <string>Start</string>
+    <string>开始游戏</string>
    </property>
   </widget>
-  <widget class="QPushButton" name="pushButton_2">
+  <widget class="QPushButton" name="customButton">
    <property name="geometry">
     <rect>
-     <x>110</x>
+     <x>170</x>
      <y>350</y>
      <width>161</width>
      <height>61</height>
@@ -72,6 +72,24 @@
    </property>
    <property name="text">
     <string>自定义游戏</string>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="exitButton">
+   <property name="geometry">
+    <rect>
+     <x>170</x>
+     <y>420</y>
+     <width>161</width>
+     <height>61</height>
+    </rect>
+   </property>
+   <property name="font">
+    <font>
+     <pointsize>16</pointsize>
+    </font>
+   </property>
+   <property name="text">
+    <string>退出游戏</string>
    </property>
   </widget>
  </widget>
