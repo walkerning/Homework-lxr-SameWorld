@@ -95,7 +95,7 @@ void MainWindow::closePrevWindow() {
 }
 
 void MainWindow::layoutGameGui(int level) {
-  //gameGui->Layout(userInputVec[level]);
+  gameGui->Layout(userInputVec[level]);
 }
 
 void MainWindow::layoutLevelGui() {

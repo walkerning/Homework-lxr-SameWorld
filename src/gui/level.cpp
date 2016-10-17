@@ -53,5 +53,8 @@ void LevelGraphicsView::mousePressEvent(QMouseEvent* e) {
     QPointF pt = mapToScene(e->pos());
     QGraphicsItem* item = scene()->itemAt(pt);
     if (item == NULL) return;
-    emit gameSignal(dynamic_cast<LevelGraphicsItem*>(item)->Level());
+    LevelGraphicsItem* specific_item;
+    if ((specific_item = dynamic_cast<LevelGraphicsItem*>(item))) {
+      emit gameSignal(specific_item->Level());
+    }
   }

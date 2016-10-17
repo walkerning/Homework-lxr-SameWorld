@@ -19,15 +19,19 @@ class ChessBoard // chessboard class
  public:
  ChessBoard(UserInput input): height(input.get_height()), width(input.get_width()), origin(input.get_origin())
     {
+      std::vector<int> status_list = input.get_status();
       for (int i = 0; i < height; i++)
         for (int j = 0; j < width; j++)
           {
             Piece::Coordinate coordinate = {i, j};
-            Piece piece(input.get_status()[i * width + j], coordinate);
+            Piece piece(status_list[i * width + j], coordinate);
             pieces.push_back(piece);
           }
     }
-
+  int Height() { return height; }
+  int Width() { return width; }
+  const std::vector<Piece::Coordinate>& Origin() { return origin; }
+  const std::vector<Piece>& Pieces() { return pieces; }
   void Start();
 
   bool SearchWayFool(Piece::Coordinate point, std::vector<Piece> pieces); // use a foolish method to search for the right way, point is the current piece, pieces is the status of all pieces on the chessboard now

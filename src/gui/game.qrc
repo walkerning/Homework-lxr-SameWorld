@@ -5,5 +5,14 @@
         <file alias="data.txt">sparesource/data.txt</file>
         <file alias="finished_level_item.png">images/finished_level_item.png</file>
         <file alias="level_item.png">images/level_item.png</file>
+        <file alias="black_origin.png">images/black_origin.png</file>
+        <file alias="black.png">images/black.png</file>
+        <file alias="black_pressed_origin.png">images/black_pressed_origin.png</file>
+        <file alias="black_pressed.png">images/black_pressed.png</file>
+
+        <file alias="white_origin.png">images/white_origin.png</file>
+        <file alias="white.png">images/white.png</file>
+        <file alias="white_pressed_origin.png">images/white_pressed_origin.png</file>
+        <file alias="white_pressed.png">images/white_pressed.png</file>
     </qresource>
 </RCC>

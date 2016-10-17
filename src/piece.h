@@ -18,16 +18,19 @@ class Piece // piece class
       rhs.y += y;
       return rhs;
     }
+    bool operator==(const Coordinate& rhs) const {
+      return (rhs.x == x && rhs.y == y);
+    }
     //TODO: add <<
   };
 
  Piece(int status, Coordinate coordinate): status(status), coordinate(coordinate), changed(false), num_of_around_piece(0) {}
 
   // get
-  int get_status() {return status;}
-  bool get_changed() {return changed;}
-  bool get_num_of_around_piece() {return num_of_around_piece;}
-  Coordinate get_coordinate() {return coordinate;}
+  int get_status() const {return status;}
+  bool get_changed() const {return changed;}
+  bool get_num_of_around_piece() const {return num_of_around_piece;}
+  Coordinate get_coordinate() const {return coordinate;}
 
   // set
   void set_status(int s) {status = s;}

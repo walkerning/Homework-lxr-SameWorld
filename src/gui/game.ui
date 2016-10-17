@@ -13,43 +13,36 @@
   <property name="windowTitle">
    <string>Form</string>
   </property>
-  <widget class="QWidget" name="verticalLayoutWidget">
+  <widget class="QWidget" name="layoutWidget_2">
    <property name="geometry">
     <rect>
-     <x>30</x>
+     <x>60</x>
      <y>20</y>
-     <width>441</width>
-     <height>501</height>
+     <width>381</width>
+     <height>51</height>
     </rect>
    </property>
-   <layout class="QVBoxLayout" name="verticalLayout" stretch="1,7">
+   <layout class="QHBoxLayout" name="horizontalLayout" stretch="0,0,0">
     <item>
-     <layout class="QHBoxLayout" name="horizontalLayout" stretch="0,0,0">
-      <item>
-       <widget class="QPushButton" name="renewButton">
-        <property name="text">
-         <string>PushButton</string>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QPushButton" name="answerButton">
-        <property name="text">
-         <string>PushButton</string>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QPushButton" name="backButton">
-        <property name="text">
-         <string>PushButton</string>
-        </property>
-       </widget>
-      </item>
-     </layout>
+     <widget class="QPushButton" name="renewButton">
+      <property name="text">
+       <string/>
+      </property>
+     </widget>
     </item>
     <item>
-     <layout class="QVBoxLayout" name="pieceLayout"/>
+     <widget class="QPushButton" name="answerButton">
+      <property name="text">
+       <string/>
+      </property>
+     </widget>
+    </item>
+    <item>
+     <widget class="QPushButton" name="backButton">
+      <property name="text">
+       <string/>
+      </property>
+     </widget>
     </item>
    </layout>
   </widget>
