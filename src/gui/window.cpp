@@ -36,14 +36,19 @@ MainWindow::MainWindow(QWidget *parent) :
   transLevelToGame->addAnimation(MakeAnimation(levelWindow, gameWindow));
   QSignalTransition* transGameToStart = gameState->addTransition(gameGui, SIGNAL(backSignal()),
                                                                  startState);
+  transGameToStart->addAnimation(MakeAnimation(gameWindow, startWindow));
+  QSignalTransition* transGameToLevel = gameState->addTransition(gameGui, SIGNAL(levelFinished()),
+                                                                 levelState);
+  transGameToLevel->addAnimation(MakeAnimation(gameWindow, levelWindow));
   QSignalTransition* transStartToQuit = startState->addTransition(startGui, SIGNAL(exitSignal()),
                                                                   quitState);
+
   stateWindowMap[startState] = startWindow;
   stateWindowMap[levelState] = levelWindow;
   stateWindowMap[gameState] = gameWindow;
 
-  QSignalTransition* transitions[] = {transStartToLevel, transLevelToGame, transGameToStart};
-  for (int i = 0; i < 3; i ++) {
+  QSignalTransition* transitions[] = {transStartToLevel, transLevelToGame, transGameToStart, transGameToLevel};
+  for (int i = 0; i < 4; i ++) {
     connect(transitions[i], SIGNAL(triggered()), this, SLOT(showWindow()));
   }
   for (const auto& kv: stateWindowMap) {
@@ -56,6 +61,7 @@ MainWindow::MainWindow(QWidget *parent) :
   // connect layout signals
   connect(startGui, SIGNAL(levelSignal()), this, SLOT(layoutLevelGui()));
   connect(levelGui, SIGNAL(gameLayoutSignal(int)), this, SLOT(layoutGameGui(int)));
+  connect(gameGui, SIGNAL(levelFinished()), this, SLOT(onLevelFinished()));
   stateM->setInitialState(startState);
   stateM->start();
 }
@@ -88,10 +94,9 @@ QAbstractAnimation* MainWindow::MakeAnimation(QGraphicsProxyWidget* formerWidget
 }
 
 void MainWindow::closePrevWindow() {
-  if (prevState == NULL)
-    return;
+  if (prevState != NULL)
+    stateWindowMap[prevState]->widget()->close();
   prevState = dynamic_cast<QState*>(this->sender());
-  stateWindowMap[prevState]->widget()->close();
 }
 
 void MainWindow::layoutGameGui(int level) {
@@ -101,21 +106,31 @@ void MainWindow::layoutGameGui(int level) {
 void MainWindow::layoutLevelGui() {
   levelGui->Layout(userInputVec.size(), current_level_);
 }
+
 void MainWindow::ReadHistory()
 {
-  QFile level_file(":level.txt");
+  QString level_fname = QDir::cleanPath(QDir::homePath() + QDir::separator() + ".sameworld_level.txt");
+  QFile level_file(level_fname);
   if (!level_file.open(QIODevice::ReadOnly | QIODevice::Text)) {
+    current_level_ = 0;
+    //qDebug() << "Unable to open level file!!";
+  }
+  QTextStream in(&level_file);
+  in >> current_level_;
+  level_file.close();
+}
+
+void MainWindow::WriteHistory()
+{
+  QString level_fname = QDir::cleanPath(QDir::homePath() + QDir::separator() + ".sameworld_level.txt");
+  QFile level_file(level_fname);
+  if (!level_file.open(QIODevice::WriteOnly | QIODevice::Text | QIODevice::Truncate)) {
     qDebug() << "Unable to open level file!!";
     return;
   }
-  QTextStream in(&level_file);
-  std::string level_line;
-  while (!in.atEnd()) {
-    QString line = in.readLine();
-    current_level_ = atoi(line.toStdString().c_str());
-  }
+  QTextStream out(&level_file);
+  out << current_level_;
   level_file.close();
-  //ReadAllLevel(user_level);
 }
 
 void MainWindow::ReadAllLevels() {
@@ -173,4 +188,10 @@ void MainWindow::ReadAllLevels() {
       }
     userInputVec.push_back(input);
   }
+}
+
+void MainWindow::onLevelFinished() {
+  current_level_ += 1;
+  layoutLevelGui();
+  WriteHistory();
 }

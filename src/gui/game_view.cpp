@@ -61,6 +61,12 @@ void GameView::mouseReleaseEvent(QMouseEvent* e) {
       item->setStatus(ItemNormal);
     }
     route_items[0]->setOrigin(false);
+    num_origin --;
+    if (judgeSuccess()) {
+      emit levelFinished();
+    } else if (num_origin <= 0) {
+      emit levelFailed();
+    }
   } else {
     for (const auto& item: route_items) {
       item->setStatus(ItemNormal);
@@ -72,10 +78,9 @@ void GameView::mouseReleaseEvent(QMouseEvent* e) {
 
 void GameView::setUserInput(UserInput input) {
   scene()->clear();
-  // for (auto item: all_items) {
-  //   delete(item);
-  // }
+  all_items.clear();
   ChessBoard board(input);
+  num_origin = board.Origin().size();
   for (auto& piece: board.Pieces()) {
     if (piece.get_status() == 3) {
       continue;
@@ -98,4 +103,17 @@ void GameView::setUserInput(UserInput input) {
   setMatrix(mtx);
   setSceneRect(rect);
   centerOn(rect.center());
+}
+
+bool GameView::judgeSuccess() {
+  int prev_color = 0;
+  for (auto& item: all_items) {
+    int color = item->Piece().get_status();
+    if (color != 3) {
+      if (prev_color && prev_color != color)
+        return false;
+      prev_color = color;
+    }
+  }
+  return true;
 }

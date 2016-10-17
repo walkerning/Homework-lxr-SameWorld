@@ -27,6 +27,10 @@ class GameView: public QGraphicsView {
   }
   void setUserInput(UserInput input);
 
+ signals:
+  void levelFinished();
+  void levelFailed();
+
  protected:
   virtual void mouseMoveEvent(QMouseEvent* e);
   virtual void mousePressEvent(QMouseEvent* e);
@@ -34,7 +38,9 @@ class GameView: public QGraphicsView {
 
  private:
   bool isNeighbor(Piece p1, Piece p2);
+  bool judgeSuccess();
 
+  int num_origin;
   bool mousePressed;
   std::vector<GameItem*> route_items;
   std::vector<GameItem*> all_items;

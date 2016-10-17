@@ -12,3 +12,13 @@ void GameGui::Restart() {
 
 void GameGui::ShowAnswer() {
 }
+
+void GameGui::onLevelFinished() {
+  QMessageBox::information(this, "Level Passed", "Congratulations!");
+  emit levelFinished();
+}
+
+void GameGui::onLevelFailed() {
+  QMessageBox::information(this, "Level Failed", "Sorry! Try again please.");
+  Restart();
+}

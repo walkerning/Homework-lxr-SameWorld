@@ -1,4 +1,5 @@
 #include <QApplication>
+#include <QVBoxLayout>
 #include "window.h"
 
 int main(int argc, char* argv[]) {

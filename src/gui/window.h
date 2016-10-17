@@ -1,5 +1,6 @@
 #include <map>
 #include <vector>
+#include <QDir>
 #include <QGraphicsView>
 #include <QGraphicsScene>
 #include <QGraphicsProxyWidget>
@@ -19,38 +20,40 @@
 class MainWindow: public QGraphicsView {
   Q_OBJECT
 
-public:
+ public:
   explicit MainWindow(QWidget *parent = NULL);
   static QAbstractAnimation* MakeAnimation(QGraphicsProxyWidget* formerWidget,
                                            QGraphicsProxyWidget* aimWidget);
   virtual ~MainWindow() {};
 
-public slots:
+  public slots:
     void showWindow();
     void closePrevWindow();
     void layoutGameGui(int);
     void layoutLevelGui();
+    void onLevelFinished();
 
-private:
+ private:
     void ReadAllLevels();
     void ReadHistory();
-  StartGui* startGui;
-  LevelGui* levelGui;
-  GameGui* gameGui;
+    void WriteHistory();
+    StartGui* startGui;
+    LevelGui* levelGui;
+    GameGui* gameGui;
 
-  QGraphicsProxyWidget* startWindow;
-  QGraphicsProxyWidget* levelWindow;
-  QGraphicsProxyWidget* gameWindow;
+    QGraphicsProxyWidget* startWindow;
+    QGraphicsProxyWidget* levelWindow;
+    QGraphicsProxyWidget* gameWindow;
 
-  QStateMachine* stateM;
-  QState* startState;
-  QState* levelState;
-  QState* gameState;
-  QFinalState* quitState;
+    QStateMachine* stateM;
+    QState* startState;
+    QState* levelState;
+    QState* gameState;
+    QFinalState* quitState;
 
-  QState* prevState;
-  std::map<QState*, QGraphicsProxyWidget*> stateWindowMap;
+    QState* prevState;
+    std::map<QState*, QGraphicsProxyWidget*> stateWindowMap;
 
-  std::vector<UserInput> userInputVec;
-  int current_level_;
+    std::vector<UserInput> userInputVec;
+    int current_level_;
 };
