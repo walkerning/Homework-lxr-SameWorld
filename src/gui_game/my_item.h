@@ -1,9 +1,11 @@
 #ifndef MY_ITEM_H
 #define MY_ITEM_H
 
+#include <iostream>
 #include <QPainter>
 #include <QGraphicsItem>
 #include <QPolygon>
+#include <QGraphicsSceneMouseEvent>
 
 //class for customization
 class MyItem: public QGraphicsObject
@@ -12,12 +14,12 @@ class MyItem: public QGraphicsObject
  public:
  MyItem(int x, int y, int radius):x(x), y(y), radius(radius)
     {
-      pressed = false;
-      setFlag(ItemIsMovable);
+      status = 0;
+      setFlag(ItemIsSelectable);
     }
 
   // item state
-  bool pressed;
+  int status; // status = 0, origin, status = 1, pressed, status = 2, released, status = 3, moved
   int x;
   int y;
   int radius;
@@ -32,6 +34,7 @@ class MyItem: public QGraphicsObject
 
   void mousePressEvent(QGraphicsSceneMouseEvent *event);
   void mouseReleaseEvent(QGraphicsSceneMouseEvent *event);
+
 };
 
 #endif // MY_ITEM_H

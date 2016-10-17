@@ -20,18 +20,14 @@ void GameGui::Layout() // once get the gameSignal, start to design layout
       {
         item[i * width + j] = new MyItem(j * radius - width * radius / 2 + 200, i * radius - height * radius / 2 + 200, radius);
         scene->addItem(item[i * width + j]);
-        QRectF item_pos = item[i * width + j]->sceneBoundingRect();
-        std::cout << item_pos.x() << "  " <<item_pos.y() << std::endl;
       }
 
+  //QGraphicsItem *item_pos = view->itemAt(272, 351);
 
-  //QPointF item_pos = view->mapFromScene(0,0);
-  //std::cout << item_pos.x() << "  "<<item_pos.y() << std::endl;
 
-  QSize size = view->sizeHint();
-  std::cout << size.height() << "  "<<size.width() << std::endl;
 
-  //QGraphicsItem *it = scene->itemAt(50, 50);
+
+
   ui.pieceLayout->addWidget(view);
 }
 
