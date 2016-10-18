@@ -3,6 +3,7 @@
 #include <cstdlib>
 #include <vector>
 #include <QWidget>
+#include <QGraphicsView>
 #include <QGraphicsScene>
 #include <QMouseEvent>
 #include <QDebug>
