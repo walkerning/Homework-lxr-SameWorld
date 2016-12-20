@@ -1,13 +1,9 @@
-all: build
-	rm ./build/gui
-	cd src/gui && qmake && make
-	ln -s $(shell pwd)/src/gui/build/debug/gui.app/Contents/MacOS/gui ./build/gui
-
-clean:
-	cd src/gui && qmake && make clean
+GXX := clang++
+BIN_NAME := main
+CPP_FILES := $(wildcard src/*.cpp)
 
 build:
-	mkdir build
+	@$(GXX) $(CPP_FILES) -o $(BIN_NAME) -O2
 
 run:
-	./build/gui
+	@./$(BIN_NAME)
